@@ -3,7 +3,9 @@ package invtweaks;
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.systems.RenderSystem;
+import invtweaks.config.ContOverride;
 import invtweaks.config.InvTweaksConfig;
+import invtweaks.config.Ruleset;
 import invtweaks.gui.InvTweaksButtonSort;
 import invtweaks.packets.PacketSortInv;
 import invtweaks.packets.PacketUpdateConfig;
@@ -293,12 +295,12 @@ public class InvTweaksMod {
                     event.getGui() != null
                             ? ((ContainerScreen<?>) event.getGui()).getContainer().getClass().getName()
                             : "";
-            InvTweaksConfig.ContOverride override =
+            ContOverride override =
                     InvTweaksConfig.getSelfCompiledContOverrides().get(contClass);
 
             if (!(event.getGui() instanceof DisplayEffectsScreen)
                     && !Optional.ofNullable(override)
-                    .filter(InvTweaksConfig.ContOverride::isSortDisabled)
+                    .filter(ContOverride::isSortDisabled)
                     .isPresent()) {
                 int x = InvTweaksConfig.NO_POS_OVERRIDE, y = InvTweaksConfig.NO_POS_OVERRIDE;
                 if (override != null) {
@@ -492,7 +494,7 @@ public class InvTweaksMod {
                 return;
             }
 
-            InvTweaksConfig.Ruleset rules = InvTweaksConfig.getSelfCompiledRules();
+            Ruleset rules = InvTweaksConfig.getSelfCompiledRules();
             IntList frozen =
                     Optional.ofNullable(rules.catToInventorySlots("/FROZEN"))
                             .map(IntArrayList::new) // prevent modification
