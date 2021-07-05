@@ -52,8 +52,7 @@ public class InvTweaksConfig {
                     .put("axe", new Category("/instanceof:net.minecraft.item.AxeItem"))
                     .put("pickaxe", new Category("/instanceof:net.minecraft.item.PickaxeItem"))
                     .put("shovel", new Category("/instanceof:net.minecraft.item.ShovelItem"))
-                    .put(
-                            "acceptableFood",
+                    .put("acceptableFood",
                             new Category(
                                     String.format(
                                             "/instanceof:net.minecraft.item.Food; !%s; !%s; !%s; !%s",
@@ -61,10 +60,21 @@ public class InvTweaksConfig {
                                             Items.SPIDER_EYE.getRegistryName(),
                                             Items.POISONOUS_POTATO.getRegistryName(),
                                             Items.PUFFERFISH.getRegistryName())))
-                    .put(
-                            "torch",
-                            new Category(Objects.requireNonNull(Items.TORCH.getRegistryName()).toString()))
-                    .put("cheapBlocks", new Category("/tag:minecraft:cobblestone", "/tag:minecraft:dirt"))
+                    .put("torch", new Category(
+                            Objects.requireNonNull(
+                                    Items.TORCH.getRegistryName()).toString(),
+                            Objects.requireNonNull(
+                                    Items.SOUL_TORCH.getRegistryName()).toString()))
+                    .put("cheapBlocks", new Category(
+                            Objects.requireNonNull(
+                                    Items.NETHERRACK.getRegistryName()).toString(),
+                            Objects.requireNonNull(
+                                    Items.COBBLESTONE.getRegistryName()).toString(),
+                            "/tag:minecraft:dirt",
+                            Objects.requireNonNull(
+                                    Items.SANDSTONE.getRegistryName()).toString(),
+                            Objects.requireNonNull(
+                                    Items.STONE.getRegistryName()).toString()))
                     .put("blocks", new Category("/instanceof:net.minecraft.item.BlockItem"))
                     .build();
     public static final List<String> DEFAULT_RAW_RULES = Arrays.asList("D /LOCKED", "A1-C9 /OTHER");
