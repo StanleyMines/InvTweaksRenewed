@@ -4,8 +4,15 @@ import com.google.common.base.Equivalence;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Streams;
+import invtweaks.config.Category;
+import invtweaks.config.ContOverride;
 import invtweaks.config.InvTweaksConfig;
-import it.unimi.dsi.fastutil.ints.*;
+import invtweaks.config.Ruleset;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
+import it.unimi.dsi.fastutil.ints.IntLists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.PlayerController;
 import net.minecraft.entity.player.PlayerEntity;
@@ -28,8 +35,8 @@ import java.util.stream.Stream;
 public class Sorting {
     public static void executeSort(PlayerEntity player, boolean isPlayerSort) {
         if (isPlayerSort) {
-            Map<String, InvTweaksConfig.Category> cats = InvTweaksConfig.getPlayerCats(player);
-            InvTweaksConfig.Ruleset rules = InvTweaksConfig.getPlayerRules(player);
+            Map<String, Category> cats = InvTweaksConfig.getPlayerCats(player);
+            Ruleset rules = InvTweaksConfig.getPlayerRules(player);
             IntList lockedSlots =
                     Optional.ofNullable(rules.catToInventorySlots("/LOCKED"))
                             .<IntList>map(IntArrayList::new) // copy list to prevent modification
@@ -76,7 +83,7 @@ public class Sorting {
                                             Comparator.comparing(Equivalence.Wrapper::get, Utils.FALLBACK_COMPARATOR));
 
                                     // System.out.println("SZ: "+gatheredSlots.size());
-                                    for (Map.Entry<String, InvTweaksConfig.Category> ent : cats.entrySet()) {
+                                    for (Map.Entry<String, Category> ent : cats.entrySet()) {
                                         // System.out.println(gatheredSlots.values().stream().flatMap(s ->
                                         // s.stream()).count());
 
@@ -134,7 +141,7 @@ public class Sorting {
                     }
                 }
 
-                for (Map.Entry<String, InvTweaksConfig.Category> ent : cats.entrySet()) {
+                for (Map.Entry<String, Category> ent : cats.entrySet()) {
                     IntList specificRules = rules.catToInventorySlots(ent.getKey());
                     if (specificRules == null) specificRules = IntLists.EMPTY_LIST;
                     specificRules =
@@ -185,7 +192,7 @@ public class Sorting {
             // check if an inventory is open
             if (cont != player.container) {
                 String contClass = cont.getClass().getName();
-                InvTweaksConfig.ContOverride override =
+                ContOverride override =
                         InvTweaksConfig.getPlayerContOverrides(player).get(contClass);
 
                 if (override != null && override.isSortDisabled()) return;
@@ -283,7 +290,7 @@ public class Sorting {
                 PlayerController pc,
                 Map<Equivalence.Wrapper<ItemStack>, Set<Slot>> gatheredSlots,
                 List<Equivalence.Wrapper<ItemStack>> stackWs,
-                InvTweaksConfig.Category cat,
+                Category cat,
                 ListIterator<Slot> toIt) {
             List<Equivalence.Wrapper<ItemStack>> subStackWs =
                     cat == null
